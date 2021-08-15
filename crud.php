@@ -51,7 +51,7 @@ if ($_SESSION['login'] == false) {
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="dashboard.php"><i class="fas fa-home-lg-alt"></i> Home</a>
+                        <a class="nav-link active" aria-current="page" href="./#home"><i class="fas fa-home-lg-alt"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -150,101 +150,56 @@ if ($_SESSION['login'] == false) {
                 <p id="lastUpdate" class="text-muted text-center lastUpdate"></p>
             </div>
         </div>
-        <h2 class="text-center mb-5 text-muted">Sertifikat Vaksin</h2>
         <div class="container col-md-8 col-10 mb-5">
             <?php
-            $id = $_SESSION['userid'];
-            $data = mysqli_query($connection, "SELECT * FROM sertif WHERE id ='$id' GROUP BY nama");
-            foreach ($data as $res) :
+            $id = $_GET['id'];
+            $nama = $_GET['nama'];
+            $type = $_GET['type'];
+            $data = mysqli_query($connection, "SELECT * FROM sertif WHERE nama = '$nama'");
+            $fetch = mysqli_fetch_assoc($data);
+            if ($type == 'edit') {
             ?>
-                <div class="shadow p-2 bg-white mb-3 name-collapse ayahBtn" role="button" onclick="collapse('<?= preg_replace('/ /i', '', $res['nama']) ?>');">
-                    <div class="d-flex bd-highlight">
-                        <div class="p-2 w-100 bd-highlight f-collapse text-muted text-uppercase">
-                            <?= $res['nama'] ?>
-                        </div>
-                        <div class="p-2 flex-shrink-1 bd-highlight">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 g-4 mb-5 mt-3 d-none" id="<?= preg_replace('/ /i', '', $res['nama']) ?>">
-                    <?php
-                    $nama = $res['nama'];
-                    $data = mysqli_query($connection, "SELECT * FROM sertif WHERE nama ='$nama'");
-                    $fetch = mysqli_fetch_all($data);
-                    ?>
-                    <div class="col">
-                        <div class="card name-collapse">
-                            <img src="data:image/jpege;base64,<?= $fetch[0][2] ?>" class="card-img-top" alt="<?= preg_replace('/ /i', '', $res['nama']) ?>">
-                            <div class="card-body">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-grow-1 bd-highlight">
-                                        <h5 class="text-muted mb-4">Vaksin Pertama</h5>
-                                    </div>
-                                    <div class="p-2 bd-highlight"><i class="fal fa-trash-alt text-danger" role="button" onclick="redirect('delete','<?= $fetch[0][1] ?>',1)"></i></div>
-                                    <div class="p-2 bd-highlight"><i class="fas fa-pencil text-warning" role="button" onclick="redirect('edit','<?= $fetch[0][1] ?>',1)"></i></div>
-                                </div>
-                                <h6><?= date('d F Y', strtotime($fetch[0][4])) ?></h6>
-                                <p class="card-text text-uppercase"><?= $fetch[0][6] ?>.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card name-collapse">
-                            <img src="data:image/jpege;base64,<?= $fetch[0][3] ?>" class="card-img-top" alt="ayah">
-                            <div class="card-body">
-                                <div class="d-flex bd-highlight">
-                                    <div class="flex-grow-1 bd-highlight">
-                                        <h5 class="text-muted mb-4">Vaksin Kedua</h5>
-                                    </div>
-                                    <div class="p-2 bd-highlight"><i class="fal fa-trash-alt text-danger" role="button" onclick="redirect('delete','<?= $fetch[0][1] ?>',2)"></i></div>
-                                    <div class="p-2 bd-highlight"><i class="fas fa-pencil text-warning" role="button" onclick="redirect('edit','<?= $fetch[0][1] ?>',2)"></i></div>
-                                    <div class="p-2 bd-highlight  <?= preg_match('/\/9j\/4AAQSkZJRgAB/i', $fetch[0][3]) ? '' : 'd-none' ?>"><i class="fas fa-info text-info" role="button" data-bs-toggle="tooltip" data-bs-html="true" title="<h5>Informasi Sertifikat</h5><P>E-Sertifikat vaksin kedua Anda belum terbit, segera lakukan vaksinasi kedua Anda sesuai lokasi & jadwal yang tercantum pada kartu vaksin Anda.</P>"></i></div>
-                                </div>
-                                <h6><?= date('d F Y', strtotime($fetch[0][5])) ?></h6>
-                                <p class=" card-text text-uppercase"><?= $fetch[0][6] ?>.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach ?>
-        </div>
-    </main>
-    <div class="modal fade" id="tambahSertif" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-blue text-white">
-                <div class="modal-header ">
-                    <h5 class="modal-title" id="staticBackdropLabel">Tambah Sertifikat</h5>
-                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <form action="upload.php" method="POST" enctype="multipart/form-data">
                     <div class="modal-body bg-white text-body">
                         <div class="mb-3">
-                            <label class="form-label">Nama</label>
-                            <input class="form-control" type="text" name="nama" id="nama" placeholder="Nama" required>
+                            <label class="form-label">Vaksin Ke</label>
+                            <input class="form-control" type="text" name="urut" id="urut" value="<?= $id ?>" readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Tanggal Vaksin Pertama</label>
-                            <input class="form-control" type="date" name="tgl" id="tgl" placeholder="1" required>
+                            <label class="form-label">Nama</label>
+                            <input class="form-control" type="text" name="nama" id="nama" value="<?= $fetch['nama'] ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Vaksin</label>
+                            <input class="form-control" type="date" name="tgl" id="tgl" value="<?= $id == 2 ? $fetch['tanggal2'] : $fetch['tanggal1'] ?>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tempat Vaksin</label>
-                            <textarea class="form-control" name="tempat" id="tempat" rows="3" placeholder="KKP KELAS II PROBOLINGGO WILAYAH KERJA PASURUAN" required></textarea>
+                            <textarea class="form-control" name="tempat" id="tempat" rows="3"><?= $fetch['tempat'] ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Sertivikat Vaksin</label>
-                            <input class="form-control" type="file" name="sertif[]" id="sertif[]" multiple required>
+                            <input class="form-control" type="file" name="sertif" id="sertif" value="<?= $fetch['gambar2'] ?>">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn bg-primary text-white" name="btn" id="btn" value="upload">Submit</button>
-                        </div>
+                    <input type="hidden" name="prefix" id="prefix" value="<?= $nama ?>">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn bg-blue text-white" name="btn" id="btn" value="edit">Submit</button>
+                        <a href='dashboard.php' class="btn bg-blue text-white">Back</a>
                     </div>
                 </form>
-            </div>
+            <?php } else if ($type == 'delete') { ?>
+                <form action="upload.php" method="POST">
+                    <h3 class="mb-5 text-center text-muted">Apakah anda yakin ingin menghapus data <?= $nama ?> ?</h3>
+                    <input type="hidden" name="prefix" id="prefix" value="<?= $nama ?>">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn bg-blue text-white" name="btn" id="btn" value="delete">Hapus</button>
+                        <a href='dashboard.php' class="btn bg-blue text-white">Batal</a>
+                    </div>
+                </form>
+            <?php }  ?>
         </div>
-    </div>
+    </main>
     <footer>
         <div class="container-fluid">
             <p class="text-center text-muted text-white">Copyright &copy; <?= date('Y') ?> Muhammad Novel. All rights reserved.</p>
@@ -335,10 +290,6 @@ if ($_SESSION['login'] == false) {
         function backToTop() {
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-        }
-
-        function redirect(type, nama, id) {
-            window.location.href = `crud.php?type=${type}&id=${id}&nama=${nama}`
         }
     </script>
 </body>

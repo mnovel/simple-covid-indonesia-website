@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2021 at 07:11 PM
+-- Generation Time: Aug 14, 2021 at 03:37 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.4.19
 
@@ -49,10 +49,11 @@ INSERT INTO `akun` (`id`, `username`, `password`) VALUES
 CREATE TABLE `sertif` (
   `id` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
-  `gambar` longblob NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `tempat` varchar(255) NOT NULL,
-  `urut` int(11) NOT NULL
+  `gambar1` longblob DEFAULT NULL,
+  `gambar2` longblob DEFAULT NULL,
+  `tanggal1` date DEFAULT NULL,
+  `tanggal2` date DEFAULT NULL,
+  `tempat` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

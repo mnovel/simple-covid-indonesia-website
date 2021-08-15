@@ -21,3 +21,23 @@ if (!$connection) {
     echo mysqli_connect_error();
     die;
 }
+
+$malicious = "/alert\(|alert \(|<|>|\"|\||\'|information_schema|\/var|\/etc|\/home|file_get_contents|shell_exec|table_schema|user\(\)|user \(\)/";
+
+if (!empty($_GET)) {
+    foreach ($_GET as $res) {
+        if (preg_match($malicious, $res)) {
+            include_once "403.php";
+            exit;
+        }
+    }
+}
+
+if (!empty($_POST)) {
+    foreach ($_POST as $res) {
+        if (preg_match($malicious, $res)) {
+            include_once "403.php";
+            exit;
+        }
+    }
+}

@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    // var url = 'https://covid.magerin.xyz'
-    var url = 'http://localhost/covid'
+    var url = 'https://covid.magerin.xyz'
+    // var url = 'http://localhost/covid'
     $('#kasus').DataTable({
         'ajax': url + '/api/?type=kasus',
         'columns': [{
